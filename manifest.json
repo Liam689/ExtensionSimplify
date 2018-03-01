@@ -1,0 +1,41 @@
+{
+  "manifest_version": 2,
+  "name": "Simplify",
+  "version": "1.0",
+
+  "description": "Simplifys the page by adding a text viewer to the center of the screen",
+  "icons": {
+    "48": "icons/toolBarIcon48x48.png"
+  },
+
+  "permissions": [
+    "activeTab",
+    "contextMenus",
+    "storage"
+  ],
+
+  "browser_action": {
+    "default_icon": "icons/toolBarIcon48x48.png",
+    "default_title": "Simplify"
+  },
+
+
+  "background": {
+      "scripts": ["background_scripts/background.js"]
+  },
+
+  "options_ui": {
+    "page": "options.html",
+    "browser_style": true
+  },
+
+  "applications" : {
+    "gecko" : {
+      "id" : "addon@example.com",
+      "strict_min_version": "42.0"
+    }
+  }
+
+
+
+}
