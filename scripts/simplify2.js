@@ -19,20 +19,11 @@ function addOverlay(){
 function addWrapper(){
   window.wrapper = document.createElement("div");
   wrapper.id = "wrapper";
-  // var getting = browser.storage.local.get(["width","height"]);
-  // getting.then(function(result){
-  //   console.log("fullfilled");
-  //   wrapper.style.width = result.width + "px";
-  //   wrapper.style.height = result.height + "px";
-  // }, function(){
-  //   console.log("rejected");
-  //   wrapper.style.width = "1000px";
-  //   wrapper.style.height = "300px";
-  // });
   wrapper.style.zIndex = "2";
+  var marginPixels = window.innerWidth * (15/100);
   wrapper.style.paddingRight = "4px";
-  wrapper.style.marginLeft = "15%";
-  wrapper.style.marginTop = "15%";
+  wrapper.style.marginLeft = marginPixels + "px";
+  wrapper.style.marginTop = marginPixels + "px";
   wrapper.style.position = "fixed";
   wrapper.style.display = "inline-block";
   wrapper.style.overflow = "hidden";
@@ -177,9 +168,41 @@ function addHeightWidthOptions(){
   containerSizeOptionsDiv.innerHTML += "<label>Width </label><button type='button' id='widthInc'>+</button><button type='button' id='widthDec'>-</button>";
   settingsSection.appendChild(containerSizeOptionsDiv);
 
-  //addHeightFunctionality();
-  //addWidthFunctionality();
+  addHeightFunctionality();
+  addWidthFunctionality();
 
+}
+
+function addHeightFunctionality(){
+  var heightIncButton = document.getElementById("heightInc");
+  var heightDecButton = document.getElementById("heightDec");
+
+  heightIncButton.onclick = function(){
+    viewBox.style.height = (parseFloat(viewBox.style.height) + 5) + "px";
+    wrapper.style.marginTop = (parseFloat(wrapper.style.marginTop) - 2.5) + "px";
+  }
+
+  heightDecButton.onclick = function(){
+    viewBox.style.height = (parseFloat(viewBox.style.height) - 5) + "px";
+    wrapper.style.marginTop = (parseFloat(wrapper.style.marginTop) + 2.5) + "px";
+  }
+}
+
+function addWidthFunctionality(){
+  var widthIncButton = document.getElementById("widthInc");
+  var widthDecButton = document.getElementById("widthDec");
+
+  widthIncButton.onclick = function(){
+    viewBox.style.width = (parseFloat(viewBox.style.width) + 5) + "px";
+    toolBar.style.width = (parseFloat(viewBox.style.width) + 5) + "px";
+    wrapper.style.marginLeft = (parseFloat(wrapper.style.marginLeft) - 2.5) + "px";
+  }
+
+  widthDecButton.onclick = function(){
+    viewBox.style.width = (parseFloat(viewBox.style.width) - 5) + "px";
+    toolBar.style.width = (parseFloat(viewBox.style.width) - 5) + "px";
+    wrapper.style.marginLeft = (parseFloat(wrapper.style.marginLeft) + 2.5) + "px";
+  }
 }
 
 function addFontSizeOptions(){
