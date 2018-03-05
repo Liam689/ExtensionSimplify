@@ -48,19 +48,17 @@ function addWrapper(){
 function addViewBox(){
   window.viewBox = document.createElement("viewBox");
   viewBox.id = "viewBox";
-  var wrap = document.getElementById('wrapper');
-  var styles = window.getComputedStyle(wrap,null);
-  var height = styles.getPropertyValue("height");
-  console.log("Height : " + height);
-  viewBox.style.height = "255px";
-  viewBox.style.width = "1000px";
-  var getting = browser.storage.local.get("colour");
+  var getting = browser.storage.local.get(["colour", "width", "height"]);
   getting.then(function(result){
     console.log("Colour Recieved");
     viewBox.style.backgroundColor = result.colour;
+    viewBox.style.height = result.height + "px";
+    viewBox.style.width = result.width + "px";
   }, function(){
     console.log("Colour not found");
     viewBox.style.backgroundColor = "white";
+    viewBox.style.height = "255px";
+    viewBox.style.width = "1000px";
   });
   viewBox.style.border = "2px solid grey";
   viewBox.style.marginBottom = "7px";
@@ -68,7 +66,6 @@ function addViewBox(){
   viewBox.style.top = "0";
   viewBox.style.float = "left";
   viewBox.style.overflow = "hidden";
-  // viewBox.style.position = "absolute";
   wrapper.appendChild(viewBox);
   console.log("ViewBox added");
 }
@@ -91,7 +88,13 @@ function addTextBox(){
 function addToolBar(){
   window.toolBar = document.createElement("div");
   toolBar.id = "toolBar";
-  toolBar.style.width = "1000px";
+  console.log(toolBar.id);
+  var getting = browser.storage.local.get("width");
+  getting.then(function(result){
+    toolBar.style.width = result.width + "px";
+  }, function(){
+    toolBar.style.width = "1000px";
+  });
   toolBar.style.height = "40px";
   toolBar.style.bottom = "0";
   toolBar.style.marginTop = "5px";
@@ -108,18 +111,15 @@ function addToolBar(){
 
 function collectAllAppropriateElements(){
   var relevantElements = document.querySelectorAll("p,li,ol,h,h1,h2,h3,h4");
-  // var dupRelevantElements = relevantElements.slice(0);
   console.log("Collecting Elements");
   console.log("Number of elements collected = " + relevantElements.length);
   var elementArrayCopy = [];
   for (var i = 0; i < relevantElements.length; i++){
     elementArrayCopy[i] = relevantElements[i].cloneNode(true);
-  }
-  for (var i = 0; i < relevantElements.length; i++) {
-    // textBox.appendChild(relevantElements[i]);
     textBox.appendChild(elementArrayCopy[i]);
   }
-  console.log("Added elements to textBox. Copy Size  = " + elementArrayCopy.length);
+
+  console.log("Added elements to textBox.");
 }
 
 function addSearchBar(){
@@ -279,12 +279,10 @@ function onStartUp(){
 
 }
 
-//console.log(globalExample);
 onStartUp();
 //finish search functionality
 //removeStyling();
 //addOwnStyling();
-//fix bug where text disappears to i.e generate copy of elements
 //finish settings functionality i.e change in storage
 //getUserPreferencesFromLocalStorage();
 //add button for top toolbar
