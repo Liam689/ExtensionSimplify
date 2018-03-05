@@ -167,8 +167,11 @@ function addHeightWidthOptions(){
   window.containerSizeOptionsDiv = document.createElement("div");
   containerSizeOptionsDiv.id = "containerSizeOptionsDiv";
   containerSizeOptionsDiv.style.float = "left";
-  containerSizeOptionsDiv.style.display = "block";
+  containerSizeOptionsDiv.style.display = "inline-block";
   containerSizeOptionsDiv.style.margin = "4px";
+  containerSizeOptionsDiv.style.height = "35px";
+  containerSizeOptionsDiv.style.lineHeight = "35px";
+  containerSizeOptionsDiv.style.textAling = "center";
   containerSizeOptionsDiv.style.borderRight = "2px solid grey";
   containerSizeOptionsDiv.innerHTML = "<label>Height </label><button type='button' id='heightInc'>+</button><button type='button' id='heightDec'>-</button>";
   containerSizeOptionsDiv.innerHTML += "<label>Width </label><button type='button' id='widthInc'>+</button><button type='button' id='widthDec'>-</button>";
@@ -182,6 +185,8 @@ function addHeightWidthOptions(){
 function addHeightFunctionality(){
   var heightIncButton = document.getElementById("heightInc");
   var heightDecButton = document.getElementById("heightDec");
+  heightIncButton.style.backgroundColor = "white";
+  heightDecButton.style.backgroundColor = "white";
 
   heightIncButton.onclick = function(){
     viewBox.style.height = (parseFloat(viewBox.style.height) + 5) + "px";
@@ -197,7 +202,9 @@ function addHeightFunctionality(){
 function addWidthFunctionality(){
   var widthIncButton = document.getElementById("widthInc");
   var widthDecButton = document.getElementById("widthDec");
-
+  widthIncButton.style.backgroundColor = "white";
+  widthDecButton.style.backgroundColor = "white";
+  widthDecButton.style.marginRight = "4px";
   widthIncButton.onclick = function(){
     viewBox.style.width = (parseFloat(viewBox.style.width) + 5) + "px";
     toolBar.style.width = (parseFloat(viewBox.style.width) + 5) + "px";
@@ -227,6 +234,8 @@ function addFontSizeOptions(){
 function addFontButtonFunctionality(){
   var fontIncButton = document.getElementById("fontInc");
   var fontDecButton = document.getElementById("fontDec");
+  fontIncButton.style.backgroundColor = "white";
+  fontDecButton.style.backgroundColor = "white";
 
   fontDecButton.onclick = function(){
     console.log("font decreased");
@@ -274,7 +283,7 @@ function addWhiteButtonFunctionality(){
 
 function addRedButtonFunctionality(){
   var redBut = document.getElementById("redBut");
-  // redBut.style.backgroundColor = "red";
+  redBut.style.backgroundColor = "white";
   redBut.onclick = function(){
     viewBox.style.backgroundColor = "red";
     textBox.style.fontColor = "white";
@@ -282,7 +291,7 @@ function addRedButtonFunctionality(){
 }
 function addBlueButtonFunctionality(){
   var blueBut = document.getElementById("blueBut");
-  blueBut.style.backgroundColor = "blue";
+  blueBut.style.backgroundColor = "white";
   blueBut.onclick = function(){
     viewBox.style.backgroundColor = "blue";
     textBox.style.color = "white";
@@ -290,7 +299,7 @@ function addBlueButtonFunctionality(){
 }
 function addYellowButtonFunctionality(){
   var yellowBut = document.getElementById("yellowBut");
-  yellowBut.style.backgroundColor = "yellow";
+  yellowBut.style.backgroundColor = "white";
   yellowBut.onclick = function(){
     viewBox.style.backgroundColor = "yellow";
     // textBox.style.fontColor = "white";
@@ -298,7 +307,7 @@ function addYellowButtonFunctionality(){
 }
 function addGreenButtonFunctionality(){
   var greenBut = document.getElementById("greenBut");
-  greenBut.style.backgroundColor = "green";
+  greenBut.style.backgroundColor = "white";
   greenBut.onclick = function(){
     viewBox.style.backgroundColor = "green";
     textBox.style.fontColor = "white";
