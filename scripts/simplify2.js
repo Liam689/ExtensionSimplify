@@ -317,13 +317,27 @@ function addSaveButton(){
   saveButtonDiv.style.margin = "4px";
   saveButtonDiv.innerHTML = "<button type='button' id='saveButton'>Save</button>";
   settingsSection.appendChild(saveButtonDiv);
+   addSaveButtonFunctionality();
+}
+
+function addSaveButtonFunctionality(){
   var saveButton = document.getElementById("saveButton");
   saveButton.onclick = function () {
     settingsSection.style.display = "none";
     searchBar.style.display = "block";
     settingsButtonDiv.style.display = "block";
+    var storingSettings = browser.storage.local.set({
+      colour: viewBox.style.backgroundColor,
+      width: parseFloat(viewBox.style.width),
+      height: parseFloat(viewBox.style.height),
+      fontSize: parseInt(textBox.style.fontSize)
+    });
+    storingSettings.then(function(){
+      console.log("stored");
+    }, function(){
+      console.log("not stored");
+    });
   }
-  //add save button functionality
 }
 
 function initialiseFunctionality(){
@@ -362,7 +376,7 @@ function onStartUp(){
   if (typeof initialised !== 'undefined'){
     onOffView();
   }else {
-    addStyleSheet();
+    // addStyleSheet();
     initialiseFunctionality();
 
   }
