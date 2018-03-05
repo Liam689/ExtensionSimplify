@@ -69,6 +69,12 @@ function addTextBox(){
   textBox.style.top = "5px";
   textBox.style.left = "5px";
   textBox.style.margin = "5px";
+  var getting = browser.storage.local.get("fontSize");
+  getting.then(function(result){
+    textBox.style.fontSize = result.fontSize + "pt";
+  }, function(){
+    textBox.style.fontSize = "19pt";
+  });
   textBox.style.overflowY = "scroll";
   textBox.style.overflowX = "hidden";
 
@@ -215,7 +221,24 @@ function addFontSizeOptions(){
   containerFontOptionsDiv.innerHTML = "<label>Font </label><button type='button' id='fontInc'>+</button><button type='button' id='fontDec'>-</button>";
   settingsSection.appendChild(containerFontOptionsDiv);
 
-  //addFontButtonFuntionality();
+  addFontButtonFunctionality();
+}
+
+function addFontButtonFunctionality(){
+  var fontIncButton = document.getElementById("fontInc");
+  var fontDecButton = document.getElementById("fontDec");
+
+  fontDecButton.onclick = function(){
+    console.log("font decreased");
+    textBox.style.fontSize = (parseInt(textBox.style.fontSize) - 1) + "pt";
+  }
+  fontIncButton.onclick = function (){
+    console.log("font increased");
+    textBox.style.fontSize = (parseInt(textBox.style.fontSize) + 1) + "pt";
+  }
+
+
+
 }
 
 function addColourOptions(){
