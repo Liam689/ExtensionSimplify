@@ -19,16 +19,16 @@ function addOverlay(){
 function addWrapper(){
   window.wrapper = document.createElement("div");
   wrapper.id = "wrapper";
-  var getting = browser.storage.local.get(["width","height"]);
-  getting.then(function(result){
-    console.log("fullfilled");
-    wrapper.style.width = result.width + "px";
-    wrapper.style.height = result.height + "px";
-  }, function(){
-    console.log("rejected");
-    wrapper.style.width = "1000px";
-    wrapper.style.height = "300px";
-  });
+  // var getting = browser.storage.local.get(["width","height"]);
+  // getting.then(function(result){
+  //   console.log("fullfilled");
+  //   wrapper.style.width = result.width + "px";
+  //   wrapper.style.height = result.height + "px";
+  // }, function(){
+  //   console.log("rejected");
+  //   wrapper.style.width = "1000px";
+  //   wrapper.style.height = "300px";
+  // });
   wrapper.style.zIndex = "2";
   wrapper.style.paddingRight = "4px";
   wrapper.style.marginLeft = "15%";
@@ -36,6 +36,8 @@ function addWrapper(){
   wrapper.style.position = "fixed";
   wrapper.style.display = "inline-block";
   wrapper.style.overflow = "hidden";
+  wrapper.style.clear = "both";
+  wrapper.style.height = ""
   overlay.insertAdjacentElement("afterend", wrapper);
   console.log("Wrapper Added");
   addViewBox();
@@ -50,7 +52,7 @@ function addViewBox(){
   var styles = window.getComputedStyle(wrap,null);
   var height = styles.getPropertyValue("height");
   console.log("Height : " + height);
-  viewBox.style.height = "300px";
+  viewBox.style.height = "255px";
   viewBox.style.width = "1000px";
   var getting = browser.storage.local.get("colour");
   getting.then(function(result){
@@ -66,7 +68,7 @@ function addViewBox(){
   viewBox.style.top = "0";
   viewBox.style.float = "left";
   viewBox.style.overflow = "hidden";
-  viewBox.style.position = "absolute";
+  // viewBox.style.position = "absolute";
   wrapper.appendChild(viewBox);
   console.log("ViewBox added");
 }
@@ -89,15 +91,14 @@ function addTextBox(){
 function addToolBar(){
   window.toolBar = document.createElement("div");
   toolBar.id = "toolBar";
-  toolBar.style.width = "100%";
+  toolBar.style.width = "1000px";
   toolBar.style.height = "40px";
   toolBar.style.bottom = "0";
+  toolBar.style.marginTop = "5px";
   toolBar.style.backgroundColor = "white";
-  // toolBar.style.padding = "3px";
   toolBar.style.border = "2px solid grey";
   toolBar.style.display = "inline-block";
   toolBar.style.float = "left";
-  toolBar.style.position = "absolute";
   wrapper.appendChild(toolBar);
   //Add inside of toolbar
   addSearchBar();
@@ -107,12 +108,18 @@ function addToolBar(){
 
 function collectAllAppropriateElements(){
   var relevantElements = document.querySelectorAll("p,li,ol,h,h1,h2,h3,h4");
+  // var dupRelevantElements = relevantElements.slice(0);
   console.log("Collecting Elements");
   console.log("Number of elements collected = " + relevantElements.length);
-  for (var i = 0; i < relevantElements.length; i++) {
-    textBox.appendChild(relevantElements[i]);
+  var elementArrayCopy = [];
+  for (var i = 0; i < relevantElements.length; i++){
+    elementArrayCopy[i] = relevantElements[i].cloneNode(true);
   }
-  console.log("Added elements to textBox");
+  for (var i = 0; i < relevantElements.length; i++) {
+    // textBox.appendChild(relevantElements[i]);
+    textBox.appendChild(elementArrayCopy[i]);
+  }
+  console.log("Added elements to textBox. Copy Size  = " + elementArrayCopy.length);
 }
 
 function addSearchBar(){
@@ -238,6 +245,7 @@ function addSaveButton(){
     searchBar.style.display = "block";
     settingsButtonDiv.style.display = "block";
   }
+  //add save button functionality
 }
 
 function initialiseFunctionality(){
@@ -256,7 +264,7 @@ function onOffView() {
     onOffBoolean = 0;
   }else {
     overlay.style.display = "block";
-    wrapper.style.display = "flex";
+    wrapper.style.display = "inline-block";
     onOffBoolean = 1;
   }
 }
@@ -273,6 +281,7 @@ function onStartUp(){
 
 //console.log(globalExample);
 onStartUp();
+//finish search functionality
 //removeStyling();
 //addOwnStyling();
 //fix bug where text disappears to i.e generate copy of elements
