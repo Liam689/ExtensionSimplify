@@ -248,33 +248,65 @@ function addColourOptions(){
   colourOptionsDiv.style.float = "left";
   colourOptionsDiv.style.margin = "4px";
   colourOptionsDiv.style.borderRight = "2px solid grey";
-  colourOptionsDiv.innerHTML = "<label>Colour</label><input type='radio' id='redRadio' name='radio'></input>";
-  colourOptionsDiv.innerHTML += "<input type='radio' id='greenRadio' name='radio'></input>";
-  colourOptionsDiv.innerHTML += "<input type='radio' id='blueRadio' name='radio'></input>";
-  colourOptionsDiv.innerHTML += "<input type='radio' id='yellowRadio' name='radio'></input>";
-  colourOptionsDiv.innerHTML += "<input type='radio' id='whiteRadio' name='radio'></input>";
+  colourOptionsDiv.innerHTML = "<button type=button class='colourButtons' id='whiteBut'>White</button>";
+  colourOptionsDiv.innerHTML += "<button type=button class='colourButtons' id='yellowBut'>Yellow</button>";
+  colourOptionsDiv.innerHTML += "<button type=button class='colourButtons' id='redBut'>Red</button>";
+  colourOptionsDiv.innerHTML += "<button type=button class='colourButtons' id='blueBut'>Blue</button>";
+  colourOptionsDiv.innerHTML += "<button type=button class='colourButtons' id='greenBut'>Green</button>";
 
   settingsSection.appendChild(colourOptionsDiv);
 
   addWhiteButtonFunctionality();
-  // addRedButtonFunctionality();
-  // addBlueButtonFunctionality();
-  // addYellowButtonFunctionality();
-  // addGreenButtonFunctionality();
+  addRedButtonFunctionality();
+  addBlueButtonFunctionality();
+  addYellowButtonFunctionality();
+  addGreenButtonFunctionality();
 
 }
 
 function addWhiteButtonFunctionality(){
-  window.whiteButton = document.getElementById('whiteRadio');
-  whiteButton.style.backgroundColor = "white";
-
-  whiteButton.onchange = function() {
-    if (this.checked) {
-      console.log("Button is Checked");
-      whiteButton.style.backgroundColor = "white";
-    }
+  var whiteBut = document.getElementById("whiteBut");
+  whiteBut.style.backgroundColor = "white";
+  whiteBut.onclick = function(){
+    viewBox.style.backgroundColor = "white";
   }
 }
+
+function addRedButtonFunctionality(){
+  var redBut = document.getElementById("redBut");
+  // redBut.style.backgroundColor = "red";
+  redBut.onclick = function(){
+    viewBox.style.backgroundColor = "red";
+    textBox.style.fontColor = "white";
+  }
+}
+function addBlueButtonFunctionality(){
+  var blueBut = document.getElementById("blueBut");
+  blueBut.style.backgroundColor = "blue";
+  blueBut.onclick = function(){
+    viewBox.style.backgroundColor = "blue";
+    textBox.style.color = "white";
+  }
+}
+function addYellowButtonFunctionality(){
+  var yellowBut = document.getElementById("yellowBut");
+  yellowBut.style.backgroundColor = "yellow";
+  yellowBut.onclick = function(){
+    viewBox.style.backgroundColor = "yellow";
+    // textBox.style.fontColor = "white";
+  }
+}
+function addGreenButtonFunctionality(){
+  var greenBut = document.getElementById("greenBut");
+  greenBut.style.backgroundColor = "green";
+  greenBut.onclick = function(){
+    viewBox.style.backgroundColor = "green";
+    textBox.style.fontColor = "white";
+  }
+}
+
+
+
 
 function addSaveButton(){
   console.log("Adding Save Button");
@@ -303,6 +335,16 @@ function initialiseFunctionality(){
   window.onOffBoolean = 1;
 }
 
+function addStyleSheet(){
+  console.log("Added stylesheet");
+  var link = document.createElement('link');
+  link.setAttribute('rel', 'stylesheet');
+  link.setAttribute('type', 'text/css');
+  link.setAttribute('href', 'css/mycss.css');
+  document.getElementsByTagName('head')[0].appendChild(link);
+  console.log(document.getElementsByTagName('head')[0]);
+}
+
 function onOffView() {
   if (onOffBoolean == 1) {
     overlay.style.display = "none";
@@ -320,7 +362,9 @@ function onStartUp(){
   if (typeof initialised !== 'undefined'){
     onOffView();
   }else {
+    addStyleSheet();
     initialiseFunctionality();
+
   }
 
 }
