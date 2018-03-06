@@ -126,10 +126,54 @@ function addSearchBar(){
   searchBar.style.float = "left";
   searchBar.style.display = "block";
   searchBar.style.borderRight = "2px solid grey";
-  searchBar.innerHTML = "<form><input type='text' id='searchString'></input><button type='button' id='searchButton'>Search</button></form>";
+  searchBar.innerHTML = "<input type='text' id='searchString'></input><button type='button' id='searchButton'>Search</button>";
+  searchBar.innerHTML += "<button type='button' id='nextButton'>Next</button>"
   toolBar.appendChild(searchBar);
   var searchButtonVar = document.getElementById("searchButton");
   searchButtonVar.style.marginRight = "5px";
+  addSearchButtonFunctionality(searchButtonVar);
+  addNextButtonFunctionality();
+}
+
+function addSearchButtonFunctionality(searchButtonVar){
+
+
+  searchButtonVar.onclick = function (){
+
+    var searchField = document.getElementById("searchString");
+        console.log("Searching : " + searchField.value);
+        console.log(textBox.textContent);
+        console.log("<br><br><br>");
+        var regSearch = new RegExp(searchField.value, "gi");
+        // console.log(textBox.textContent.replace("Page", "Searched"));
+        textBox.innerHTML = textBox.innerHTML.replace(regSearch, function(match){
+          return "<span class='searchSpans' style='background-color:yellow;'>" + match + "</span>";
+        });
+        searchButtonVar.style.pointerEvents = "none";
+        nextButton.style.pointerEvents = "auto";
+
+
+        //Search for text in elements
+        //Store old elements in array
+        //Highlight them all and add a specific numbered id
+        //Scroll from one id to the next
+        //if search contents changes delete new
+        //
+  }
+}
+
+function addNextButtonFunctionality(){
+  console.log("nextButton added");
+  window.nextButton = document.getElementById("nextButton");
+  nextButton.style.pointerEvents = "none";
+  var searchCounter = 0;
+  nextButton.onclick = function (){
+    console.log("Button Clicked");
+    var searchList = document.getElementsByClassName("searchSpans");
+    searchList[searchCounter].scrollIntoView();
+    searchCounter ++;
+    console.log("searchCounter");
+  }
 }
 
 function addSettingsButton(){
