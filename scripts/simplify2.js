@@ -9,7 +9,7 @@ function addOverlay(){
   overlay.style.left = "0";
   overlay.style.height = "100%";
   overlay.style.width = "100%";
-  overlay.style.zIndex = "1";
+  overlay.style.zIndex = "999";
   overlay.style.display = "block";
   overlay.style.backgroundColor = "grey";
   window.bodyTag = document.getElementsByTagName('body');
@@ -19,7 +19,7 @@ function addOverlay(){
 function addWrapper(){
   window.wrapper = document.createElement("div");
   wrapper.id = "wrapper";
-  wrapper.style.zIndex = "2";
+  wrapper.style.zIndex = "1000";
   var marginPixels = window.innerWidth * (15/100);
   wrapper.style.paddingRight = "4px";
   wrapper.style.marginLeft = marginPixels + "px";
@@ -127,52 +127,86 @@ function addSearchBar(){
   searchBar.style.display = "block";
   searchBar.style.borderRight = "2px solid grey";
   searchBar.innerHTML = "<input type='text' id='searchString'></input><button type='button' id='searchButton'>Search</button>";
-  searchBar.innerHTML += "<button type='button' id='nextButton'>Next</button>"
+
+  searchBar.innerHTML += "<button type='button' id='nextButton'>Next</button>";
+  searchBar.innerHTML += "<button type='button' id='prevButton'>Previous</button>";
+  searchBar.innerHTML += "<button type='button' id='clearSearchButton' style='display:none;'>Clear Search</button>";
   toolBar.appendChild(searchBar);
-  var searchButtonVar = document.getElementById("searchButton");
+  window.searchButtonVar = document.getElementById("searchButton");
   searchButtonVar.style.marginRight = "5px";
   addSearchButtonFunctionality(searchButtonVar);
-  addNextButtonFunctionality();
+  addNextPrevButtonFunctionality();
+  addClearSearchButton();
 }
+
+function addClearSearchButton(){
+  window.clearSearchButton = document.getElementById("clearSearchButton");
+  clearSearchButton.style.marginRight = "4px";
+  clearSearchButton.onclick = function () {
+    clearSearchButton.style.display = "none";
+    searchButtonVar.style.display = "inline-block";
+    console.log("Clearing");
+    console.log(document.getElementsByClassName("searchSpans").length);
+    while (document.getElementsByClassName("searchSpans").length > 0) {
+      console.log(document.getElementsByClassName('searchSpans').length);
+      document.getElementsByClassName('searchSpans')[0].className = "";
+    }
+    window.searchField.value = "";
+    window.searchList = [];
+
+  }
+
+}
+
+
 
 function addSearchButtonFunctionality(searchButtonVar){
 
 
   searchButtonVar.onclick = function (){
 
-    var searchField = document.getElementById("searchString");
-        console.log("Searching : " + searchField.value);
-        console.log(textBox.textContent);
-        console.log("<br><br><br>");
-        var regSearch = new RegExp(searchField.value, "gi");
-        // console.log(textBox.textContent.replace("Page", "Searched"));
-        textBox.innerHTML = textBox.innerHTML.replace(regSearch, function(match){
-          return "<span class='searchSpans' style='background-color:yellow;'>" + match + "</span>";
-        });
-        searchButtonVar.style.pointerEvents = "none";
-        nextButton.style.pointerEvents = "auto";
-
-
-        //Search for text in elements
-        //Store old elements in array
-        //Highlight them all and add a specific numbered id
-        //Scroll from one id to the next
-        //if search contents changes delete new
-        //
+    window.searchField = document.getElementById("searchString");
+    if (searchField.value != ""){
+      console.log("Searching : " + searchField.value);
+      var regSearch = new RegExp(searchField.value, "gi");
+      textBox.innerHTML = textBox.innerHTML.replace(regSearch, function(match){
+        return "<span class='searchSpans'>" + match + "</span>";
+      });
+      window.oldValue = searchField.value;
+      var stringToRemove = "<span class='searchSpans'>" + oldValue + "</span>";
+      var regRemove = new RegExp(stringToRemove, "gi");
+      textBox.innerHTML = textBox.innerHTML.replace(regRemove, function(match){
+        console.log(match);
+        return oldValue;
+      });
+      window.searchList = document.getElementsByClassName("searchSpans");
+      searchButtonVar.style.display = "none";
+      clearSearchButton.style.display = "inline-block";
+      nextButton.style.pointerEvents = "auto";
+      prevButton.style.pointerEvents = "auto";
+    }
   }
 }
 
-function addNextButtonFunctionality(){
+function addNextPrevButtonFunctionality(){
   console.log("nextButton added");
   window.nextButton = document.getElementById("nextButton");
+  window.prevButton = document.getElementById("prevButton");
+  prevButton.style.pointerEvents = "none";
   nextButton.style.pointerEvents = "none";
-  var searchCounter = 0;
+  prevButton.style.marginRight = "4px";
+  var searchCounter = 1;
   nextButton.onclick = function (){
-    console.log("Button Clicked");
-    var searchList = document.getElementsByClassName("searchSpans");
+    console.log("next search");
     searchList[searchCounter].scrollIntoView();
     searchCounter ++;
-    console.log("searchCounter");
+  }
+
+  prevButton.onclick = function(){
+    console.log("previous search");
+    searchCounter --;
+    searchList[searchCounter - 1].scrollIntoView();
+
   }
 }
 
@@ -184,14 +218,34 @@ function addSettingsButton(){
   settingsButtonDiv.style.display = "block";
   settingsButtonDiv.style.marginLeft = "4px";
   settingsButtonDiv.innerHTML = "<button type='button' id='settingsButton'>Settings</button>";
+  settingsButtonDiv.innerHTML += "<button type='button' id='removeStylesButton'>Remove Styles</button>";
   toolBar.appendChild(settingsButtonDiv);
-
+  addRemoveStylesButtonFunctionality();
   var settingsButton = document.getElementById('settingsButton');
   settingsButton.onclick = function() {
     console.log("button clicked");
     searchBar.style.display = "none";
     settingsButtonDiv.style.display = "none";
     settingsSection.style.display = "block";
+  }
+}
+
+function addRemoveStylesButtonFunctionality(){
+  console.log("Remove Styles");
+  var removeStylesButton = document.getElementById("removeStylesButton");
+  removeStylesButton.style.float = "right";
+  removeStylesButton.onclick = function(){
+    iterateThroughChildren(textBox);
+  }
+}
+
+function iterateThroughChildren(element){
+  console.log("remove Style");
+  element.className = "";
+  if(element.hasChildNodes()){
+    for (var i = 0; i < element.childNodes.length; i++) {
+      iterateThroughChildren(element.childNodes[i]);
+    }
   }
 }
 
@@ -212,7 +266,8 @@ function addHeightWidthOptions(){
   containerSizeOptionsDiv.id = "containerSizeOptionsDiv";
   containerSizeOptionsDiv.style.float = "left";
   containerSizeOptionsDiv.style.display = "inline-block";
-  containerSizeOptionsDiv.style.margin = "4px";
+  containerSizeOptionsDiv.style.marginTop = "2px";
+  containerSizeOptionsDiv.style.marginLeft   = "4px";
   containerSizeOptionsDiv.style.height = "35px";
   containerSizeOptionsDiv.style.lineHeight = "35px";
   containerSizeOptionsDiv.style.textAling = "center";
@@ -229,9 +284,7 @@ function addHeightWidthOptions(){
 function addHeightFunctionality(){
   var heightIncButton = document.getElementById("heightInc");
   var heightDecButton = document.getElementById("heightDec");
-  heightIncButton.style.backgroundColor = "white";
-  heightDecButton.style.backgroundColor = "white";
-
+  heightDecButton.style.marginRight = "4px";
   heightIncButton.onclick = function(){
     viewBox.style.height = (parseFloat(viewBox.style.height) + 5) + "px";
     wrapper.style.marginTop = (parseFloat(wrapper.style.marginTop) - 2.5) + "px";
@@ -246,8 +299,6 @@ function addHeightFunctionality(){
 function addWidthFunctionality(){
   var widthIncButton = document.getElementById("widthInc");
   var widthDecButton = document.getElementById("widthDec");
-  widthIncButton.style.backgroundColor = "white";
-  widthDecButton.style.backgroundColor = "white";
   widthDecButton.style.marginRight = "4px";
   widthIncButton.onclick = function(){
     viewBox.style.width = (parseFloat(viewBox.style.width) + 5) + "px";
@@ -278,8 +329,7 @@ function addFontSizeOptions(){
 function addFontButtonFunctionality(){
   var fontIncButton = document.getElementById("fontInc");
   var fontDecButton = document.getElementById("fontDec");
-  fontIncButton.style.backgroundColor = "white";
-  fontDecButton.style.backgroundColor = "white";
+  fontDecButton.style.marginRight = "4px";
 
   fontDecButton.onclick = function(){
     console.log("font decreased");
@@ -293,6 +343,7 @@ function addFontButtonFunctionality(){
 
 
 }
+
 
 function addColourOptions(){
   window.colourOptionsDiv = document.createElement("div");
@@ -319,7 +370,7 @@ function addColourOptions(){
 
 function addWhiteButtonFunctionality(){
   var whiteBut = document.getElementById("whiteBut");
-  whiteBut.style.backgroundColor = "white";
+
   whiteBut.onclick = function(){
     viewBox.style.backgroundColor = "white";
   }
@@ -327,7 +378,7 @@ function addWhiteButtonFunctionality(){
 
 function addRedButtonFunctionality(){
   var redBut = document.getElementById("redBut");
-  redBut.style.backgroundColor = "white";
+
   redBut.onclick = function(){
     viewBox.style.backgroundColor = "red";
     textBox.style.fontColor = "white";
@@ -335,7 +386,7 @@ function addRedButtonFunctionality(){
 }
 function addBlueButtonFunctionality(){
   var blueBut = document.getElementById("blueBut");
-  blueBut.style.backgroundColor = "white";
+
   blueBut.onclick = function(){
     viewBox.style.backgroundColor = "blue";
     textBox.style.color = "white";
@@ -343,7 +394,7 @@ function addBlueButtonFunctionality(){
 }
 function addYellowButtonFunctionality(){
   var yellowBut = document.getElementById("yellowBut");
-  yellowBut.style.backgroundColor = "white";
+
   yellowBut.onclick = function(){
     viewBox.style.backgroundColor = "yellow";
     // textBox.style.fontColor = "white";
@@ -351,7 +402,7 @@ function addYellowButtonFunctionality(){
 }
 function addGreenButtonFunctionality(){
   var greenBut = document.getElementById("greenBut");
-  greenBut.style.backgroundColor = "white";
+  greenBut.style.marginRight = "4px";
   greenBut.onclick = function(){
     viewBox.style.backgroundColor = "green";
     textBox.style.fontColor = "white";
@@ -375,6 +426,8 @@ function addSaveButton(){
 
 function addSaveButtonFunctionality(){
   var saveButton = document.getElementById("saveButton");
+  saveButton.style.width = "60px";
+  saveButton.style.padding = "0";
   saveButton.onclick = function () {
     settingsSection.style.display = "none";
     searchBar.style.display = "block";
@@ -403,13 +456,12 @@ function initialiseFunctionality(){
 }
 
 function addStyleSheet(){
-  console.log("Added stylesheet");
-  var link = document.createElement('link');
-  link.setAttribute('rel', 'stylesheet');
-  link.setAttribute('type', 'text/css');
-  link.setAttribute('href', 'css/mycss.css');
-  document.getElementsByTagName('head')[0].appendChild(link);
-  console.log(document.getElementsByTagName('head')[0]);
+  
+  // insertingCSS.then(console.log(fulfilled);, console.log("error"););
+  var styleS = document.createElement('style');
+  styleS.type = 'text/css';
+  styleS.innerHTML = '.searchSpans { background-color:yellow;}';
+  document.getElementsByTagName('head')[0].appendChild(styleS);
 }
 
 function onOffView() {
@@ -429,7 +481,7 @@ function onStartUp(){
   if (typeof initialised !== 'undefined'){
     onOffView();
   }else {
-    // addStyleSheet();
+   addStyleSheet();
     initialiseFunctionality();
 
   }

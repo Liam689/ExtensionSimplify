@@ -8,6 +8,10 @@
     "48": "icons/toolBarIcon48x48.png"
   },
 
+  "web_accessible_resources": [
+    "css/mycss.css"
+  ],
+  
   "permissions": [
     "activeTab",
     "contextMenus",

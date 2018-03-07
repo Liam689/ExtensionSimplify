@@ -14,6 +14,7 @@ browser.browserAction.onClicked.addListener(function(tab){
 
 browser.contextMenus.onClicked.addListener(function(info, tab) {
   if (info.menuItemId == "simplify-menu") {
+    var insertingCSS = browser.tabs.insertCSS({file: "/scripts/mycss.css"});
     browser.tabs.executeScript({
       file : "scripts/simplify2.js"
     });
