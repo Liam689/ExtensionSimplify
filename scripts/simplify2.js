@@ -130,7 +130,7 @@ function addSearchBar(){
 
   searchBar.innerHTML += "<button type='button' id='nextButton'>Next</button>";
   searchBar.innerHTML += "<button type='button' id='prevButton'>Previous</button>";
-  searchBar.innerHTML += "<button type='button' id='clearSearchButton' style='display:none;'>Clear Search</button>";
+  searchBar.innerHTML += "<button type='button' class='btn' id='clearSearchButton' style='display:none;'>Clear Search</button>";
   toolBar.appendChild(searchBar);
   window.searchButtonVar = document.getElementById("searchButton");
   searchButtonVar.style.marginRight = "5px";
@@ -352,6 +352,7 @@ function addColourOptions(){
   colourOptionsDiv.style.float = "left";
   colourOptionsDiv.style.margin = "4px";
   colourOptionsDiv.style.borderRight = "2px solid grey";
+  colourOptionsDiv.innerHTML = ""
   colourOptionsDiv.innerHTML = "<button type=button class='colourButtons' id='whiteBut'>White</button>";
   colourOptionsDiv.innerHTML += "<button type=button class='colourButtons' id='yellowBut'>Yellow</button>";
   colourOptionsDiv.innerHTML += "<button type=button class='colourButtons' id='redBut'>Red</button>";
@@ -456,7 +457,7 @@ function initialiseFunctionality(){
 }
 
 function addStyleSheet(){
-  
+
   // insertingCSS.then(console.log(fulfilled);, console.log("error"););
   var styleS = document.createElement('style');
   styleS.type = 'text/css';
