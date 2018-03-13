@@ -9,9 +9,13 @@
   },
 
   "web_accessible_resources": [
-    "css/mycss.css"
+    "css/mycss.css",
+    "img/minusButtonImage.png",
+    "img/plusButtonImage.png",
+    "img/searchButtonImage.png",
+    "img/settingsButtonImage.png"
   ],
-  
+
   "permissions": [
     "activeTab",
     "contextMenus",

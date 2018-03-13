@@ -20,6 +20,8 @@ function addWrapper(){
   window.wrapper = document.createElement("div");
   wrapper.id = "wrapper";
   wrapper.style.zIndex = "1000";
+  var marginTop = 0;
+  var marginSides = 0;
   var marginPixels = window.innerWidth * (15/100);
   wrapper.style.paddingRight = "4px";
   wrapper.style.marginLeft = marginPixels + "px";
@@ -107,16 +109,79 @@ function addToolBar(){
 }
 
 function collectAllAppropriateElements(){
-  var relevantElements = document.querySelectorAll("p,li,ol,h,h1,h2,h3,h4");
+  var relevantElements = document.querySelectorAll("p,ul,ol,h,h1,h2,h3,h4");
   console.log("Collecting Elements");
   console.log("Number of elements collected = " + relevantElements.length);
   var elementArrayCopy = [];
   for (var i = 0; i < relevantElements.length; i++){
     elementArrayCopy[i] = relevantElements[i].cloneNode(true);
-    textBox.appendChild(elementArrayCopy[i]);
+    // textBox.appendChild(elementArrayCopy[i]);
+  }
+  // console.log(elementArrayCopy.length);
+  console.log("Added elements to textBox.");
+}
+
+function collectAllAppropriateElementsVTwo(){
+  var bodyTag = document.querySelector("body");
+  var divTags = document.querySelectorAll("div");
+  var divCopyArray = [];
+  window.appropriateElements = [];
+  // for (var i = 0; i < divTags.length; i++) {
+  //   divCopyArray[i] = divTags[i].cloneNode(true);
+  //   lookForAppropriateTags(divCopyArray[i]);
+  // }
+  lookForAppropriateTags(bodyTag);
+  console.log(appropriateElements.length);
+  appropriateElements.forEach(function(element){
+    textBox.appendChild(element);
+  });
+  }
+  //Collect All elements
+  //Find out their parents
+  //Remove them if they are of a certain type
+
+
+
+
+function lookForAppropriateTags(element){
+  window.unwantedElements = ['HEADER', 'NAV', 'BUTTON', 'SCRIPT', 'SVG', 'IMG'];
+  window.wantedElements = ['P', 'UL', 'LI', 'OL', 'H', 'H1', 'H2', 'H3', 'H4'];
+  window.unwantedRoles = ['navigation', 'complementary', 'banner','menu '];
+  if (element.tagName == 'DIV') {
+    console.log(/share/g.test(element.className) +  " : " + element.className);
+    if (!(unwantedRoles.includes(element.getAttribute('role'))) && !(/share/g.test(element.className))) {
+      [].forEach.call(element.childNodes, function(item){
+        lookForAppropriateTags(item);
+      });
+    }
+
+  }else{
+    if (!unwantedElements.includes(element.tagName)) {
+      if (wantedElements.includes(element.tagName)) {
+        // console.log("Wanted item : " + element.tagName);
+        appropriateElements.push(element.cloneNode(true));
+      }else if (element.hasChildNodes()) {
+        [].forEach.call(element.childNodes, function(item){
+          lookForAppropriateTags(item);
+        });
+      }
+
+
+    }
   }
 
-  console.log("Added elements to textBox.");
+
+  //
+  // if(element.hasChildNodes()){
+  //     [].forEach.call(element.childNodes, function(item){
+  //       if (!unwantedElements.includes(item.tagName)) {
+  //         console.log("Wanted Item : " + item.tagName);
+  //       }
+  //
+  //     });
+  // }
+
+
 }
 
 function addSearchBar(){
@@ -264,6 +329,7 @@ function addSettingsSection(){
 function addHeightWidthOptions(){
   window.containerSizeOptionsDiv = document.createElement("div");
   containerSizeOptionsDiv.id = "containerSizeOptionsDiv";
+  containerSizeOptionsDiv.className = "settingsSectionDiv";
   containerSizeOptionsDiv.style.float = "left";
   containerSizeOptionsDiv.style.display = "inline-block";
   containerSizeOptionsDiv.style.marginTop = "2px";
@@ -272,8 +338,8 @@ function addHeightWidthOptions(){
   containerSizeOptionsDiv.style.lineHeight = "35px";
   containerSizeOptionsDiv.style.textAling = "center";
   containerSizeOptionsDiv.style.borderRight = "2px solid grey";
-  containerSizeOptionsDiv.innerHTML = "<label>Height </label><button type='button' id='heightInc'>+</button><button type='button' id='heightDec'>-</button>";
-  containerSizeOptionsDiv.innerHTML += "<label>Width </label><button type='button' id='widthInc'>+</button><button type='button' id='widthDec'>-</button>";
+  containerSizeOptionsDiv.innerHTML = "<label>Height </label><button type='button' class='simpSizeButtons' id='heightInc'>+</button><button type='button' class='simpSizeButtons' id='heightDec'>-</button>";
+  containerSizeOptionsDiv.innerHTML += "<label>Width </label><button type='button' class='simpSizeButtons' id='widthInc'>+</button><button type='button' class='simpSizeButtons' id='widthDec'>-</button>";
   settingsSection.appendChild(containerSizeOptionsDiv);
 
   addHeightFunctionality();
@@ -316,11 +382,8 @@ function addWidthFunctionality(){
 function addFontSizeOptions(){
   window.containerFontOptionsDiv = document.createElement("div");
   containerFontOptionsDiv.id = "containerFontOptionsDiv";
-  containerFontOptionsDiv.style.float = "left";
-  containerFontOptionsDiv.style.display = "block";
-  containerFontOptionsDiv.style.margin = "4px";
-  containerFontOptionsDiv.style.borderRight = "2px solid grey";
-  containerFontOptionsDiv.innerHTML = "<label>Font </label><button type='button' id='fontInc'>+</button><button type='button' id='fontDec'>-</button>";
+  containerFontOptionsDiv.className = "settingsSectionDiv";
+  containerFontOptionsDiv.innerHTML = "<label>Font </label><button type='button' class='simpSizeButtons' id='fontInc'>+</button><button type='button' class='simpSizeButtons' id='fontDec'>-</button>";
   settingsSection.appendChild(containerFontOptionsDiv);
 
   addFontButtonFunctionality();
@@ -348,67 +411,24 @@ function addFontButtonFunctionality(){
 function addColourOptions(){
   window.colourOptionsDiv = document.createElement("div");
   colourOptionsDiv.id = "colourOptionsDiv";
-  colourOptionsDiv.style.display = "block";
-  colourOptionsDiv.style.float = "left";
-  colourOptionsDiv.style.margin = "4px";
-  colourOptionsDiv.style.borderRight = "2px solid grey";
-  colourOptionsDiv.innerHTML = ""
-  colourOptionsDiv.innerHTML = "<button type=button class='colourButtons' id='whiteBut'>White</button>";
-  colourOptionsDiv.innerHTML += "<button type=button class='colourButtons' id='yellowBut'>Yellow</button>";
-  colourOptionsDiv.innerHTML += "<button type=button class='colourButtons' id='redBut'>Red</button>";
-  colourOptionsDiv.innerHTML += "<button type=button class='colourButtons' id='blueBut'>Blue</button>";
-  colourOptionsDiv.innerHTML += "<button type=button class='colourButtons' id='greenBut'>Green</button>";
-
+  colourOptionsDiv.className = "settingsSectionDiv";
+  colourOptionsDiv.innerHTML = "<select name='colourOptions' id='selectColour'><option value='white' style='background-color:white;'>White</option><option value='#FFFF66' style='background-color:#FFFF66;'>Yellow</option><option value='#FF6633'>Red</option><option value='#66CCCC'>Blue</option><option value='#99FF66'>Green</option></select>";
   settingsSection.appendChild(colourOptionsDiv);
-
-  addWhiteButtonFunctionality();
-  addRedButtonFunctionality();
-  addBlueButtonFunctionality();
-  addYellowButtonFunctionality();
-  addGreenButtonFunctionality();
+  addColourFunctionality();
 
 }
 
-function addWhiteButtonFunctionality(){
-  var whiteBut = document.getElementById("whiteBut");
-
-  whiteBut.onclick = function(){
-    viewBox.style.backgroundColor = "white";
-  }
+function addColourFunctionality(){
+  var selectOption = document.getElementById("selectColour");
+  selectOption.style.width = "auto";
+  selectOption.style.marginRight = "4px";
+  selectOption.style.fontSize = "large";
+  selectOption.onchange = function(){
+    viewBox.style.backgroundColor = selectOption.value;
+  };
 }
 
-function addRedButtonFunctionality(){
-  var redBut = document.getElementById("redBut");
 
-  redBut.onclick = function(){
-    viewBox.style.backgroundColor = "red";
-    textBox.style.fontColor = "white";
-  }
-}
-function addBlueButtonFunctionality(){
-  var blueBut = document.getElementById("blueBut");
-
-  blueBut.onclick = function(){
-    viewBox.style.backgroundColor = "blue";
-    textBox.style.color = "white";
-  }
-}
-function addYellowButtonFunctionality(){
-  var yellowBut = document.getElementById("yellowBut");
-
-  yellowBut.onclick = function(){
-    viewBox.style.backgroundColor = "yellow";
-    // textBox.style.fontColor = "white";
-  }
-}
-function addGreenButtonFunctionality(){
-  var greenBut = document.getElementById("greenBut");
-  greenBut.style.marginRight = "4px";
-  greenBut.onclick = function(){
-    viewBox.style.backgroundColor = "green";
-    textBox.style.fontColor = "white";
-  }
-}
 
 
 
@@ -417,18 +437,19 @@ function addSaveButton(){
   console.log("Adding Save Button");
   window.saveButtonDiv = document.createElement("div");
   saveButtonDiv.id = "saveButtonDiv";
-  saveButtonDiv.style.float = "left";
-  saveButtonDiv.style.display = "block";
-  saveButtonDiv.style.margin = "4px";
+  // saveButtonDiv.style.float = "left";
+  saveButtonDiv.className = "settingsSectionDiv";
+  // saveButtonDiv.style.display = "block";
+  // saveButtonDiv.style.margin = "4px";
   saveButtonDiv.innerHTML = "<button type='button' id='saveButton'>Save</button>";
   settingsSection.appendChild(saveButtonDiv);
    addSaveButtonFunctionality();
 }
-
 function addSaveButtonFunctionality(){
   var saveButton = document.getElementById("saveButton");
   saveButton.style.width = "60px";
   saveButton.style.padding = "0";
+  saveButton.style.marginRight = "4px";
   saveButton.onclick = function () {
     settingsSection.style.display = "none";
     searchBar.style.display = "block";
@@ -451,7 +472,8 @@ function initialiseFunctionality(){
   console.log("Initialise");
   addOverlay();
   addWrapper();
-  collectAllAppropriateElements();
+  collectAllAppropriateElementsVTwo();
+  // collectAllAppropriateElements();
   window.initialised = true;
   window.onOffBoolean = 1;
 }
@@ -467,12 +489,14 @@ function addStyleSheet(){
 
 function onOffView() {
   if (onOffBoolean == 1) {
+    console.log("Off");
     overlay.style.display = "none";
     wrapper.style.display = "none";
     onOffBoolean = 0;
   }else {
     overlay.style.display = "block";
     wrapper.style.display = "inline-block";
+    console.log("On");
     onOffBoolean = 1;
   }
 }
@@ -497,3 +521,47 @@ onStartUp();
 //getUserPreferencesFromLocalStorage();
 //add button for top toolbar
 //add option to choose by section
+// function addWhiteButtonFunctionality(){
+//   var whiteBut = document.getElementById("whiteBut");
+//
+//   whiteBut.onclick = function(){
+//     viewBox.style.backgroundColor = "white";
+//   }
+// }
+//
+// function addRedButtonFunctionality(){
+//   var redBut = document.getElementById("redBut");
+//
+//   redBut.onclick = function(){
+//     viewBox.style.backgroundColor = "red";
+//     textBox.style.fontColor = "white";
+//   }
+// }
+// function addBlueButtonFunctionality(){
+//   var blueBut = document.getElementById("blueBut");
+//
+//   blueBut.onclick = function(){
+//     viewBox.style.backgroundColor = "blue";
+//     textBox.style.color = "white";
+//   }
+// }
+// function addYellowButtonFunctionality(){
+//   var yellowBut = document.getElementById("yellowBut");
+//
+//   yellowBut.onclick = function(){
+//     viewBox.style.backgroundColor = "yellow";
+//   }
+// }
+// function addGreenButtonFunctionality(){
+//   var greenBut = document.getElementById("greenBut");
+//   greenBut.style.marginRight = "4px";
+//   greenBut.onclick = function(){
+//     viewBox.style.backgroundColor = "green";
+//     textBox.style.fontColor = "white";
+//   }
+// }
+// addWhiteButtonFunctionality();
+// addRedButtonFunctionality();
+// addBlueButtonFunctionality();
+// addYellowButtonFunctionality();
+// addGreenButtonFunctionality();
