@@ -32,10 +32,9 @@ function addWrapper(){
   });
   var marginSides = 0;
   var marginPixels = window.innerWidth * (15/100);
-  var getting =
   wrapper.style.paddingRight = "4px";
-  wrapper.style.marginLeft = "100px";
-  wrapper.style.marginTop = "100px";
+  // wrapper.style.marginLeft = "100px";
+  // wrapper.style.marginTop = "100px";
   wrapper.style.position = "fixed";
   wrapper.style.display = "inline-block";
   wrapper.style.overflow = "hidden";
@@ -74,27 +73,22 @@ function addViewBox(){
   wrapper.appendChild(viewBox);
 }
 
-function fixWrapperMargin(){
-  console.log("Height : " + parseFloat(viewBox.style.height));
-  // wrapper.style.marginTop = ((window.innerHeight - parseFloat(viewBox.style.height)) / 2) + "px";
-}
-
 function addTextBox(){
   window.textBox = document.createElement("div");
   textBox.id = "textBox";
-  textBox.style.height = "100%";
-  textBox.style.width = "100%";
-  textBox.style.top = "5px";
-  textBox.style.left = "5px";
-  textBox.style.margin = "5px";
+  // textBox.style.height = "100%";
+  // textBox.style.width = "100%";
+  // textBox.style.top = "5px";
+  // textBox.style.left = "5px";
+  // textBox.style.margin = "5px";
   var getting = browser.storage.local.get("fontSize");
   getting.then(function(result){
     textBox.style.fontSize = result.fontSize + "pt";
   }, function(){
     textBox.style.fontSize = "19pt";
   });
-  textBox.style.overflowY = "scroll";
-  textBox.style.overflowX = "hidden";
+  // textBox.style.overflowY = "scroll";
+  // textBox.style.overflowX = "hidden";
 
   viewBox.appendChild(textBox);
   console.log("Text Box added");
@@ -204,11 +198,11 @@ function addSearchBar(){
   searchBar.style.float = "left";
   searchBar.style.display = "block";
   searchBar.style.borderRight = "2px solid grey";
-  searchBar.innerHTML = "<input type='text' id='searchString'></input><button type='button' id='searchButton'>Search</button>";
+  searchBar.innerHTML = "<input type='text' class='searchField' id='searchString'></input><button type='button' class='textButtons' id='searchButton'>Search</button>";
 
-  searchBar.innerHTML += "<button type='button' id='nextButton'>Next</button>";
-  searchBar.innerHTML += "<button type='button' id='prevButton'>Previous</button>";
-  searchBar.innerHTML += "<button type='button' class='btn' id='clearSearchButton' style='display:none;'>Clear Search</button>";
+  searchBar.innerHTML += "<button type='button' class='textButtons' id='nextButton'>Next</button>";
+  searchBar.innerHTML += "<button type='button' class='textButtons' id='prevButton'>Previous</button>";
+  searchBar.innerHTML += "<button type='button' class='textButtons' id='clearSearchButton' style='display:none;'>Clear Search</button>";
   toolBar.appendChild(searchBar);
   window.searchButtonVar = document.getElementById("searchButton");
   searchButtonVar.style.marginRight = "5px";
@@ -232,6 +226,7 @@ function addClearSearchButton(){
     }
     window.searchField.value = "";
     window.searchList = [];
+    window.searchCounter = "0";
 
   }
 
@@ -274,7 +269,7 @@ function addNextPrevButtonFunctionality(){
   prevButton.style.pointerEvents = "none";
   nextButton.style.pointerEvents = "none";
   prevButton.style.marginRight = "4px";
-  var searchCounter = 1;
+  window.searchCounter = 0;
   nextButton.onclick = function (){
     console.log("next search");
     if (searchCounter < searchList.length) {
@@ -302,8 +297,8 @@ function addSettingsButton(){
   settingsButtonDiv.style.marginTop = "4px";
   settingsButtonDiv.style.display = "block";
   settingsButtonDiv.style.marginLeft = "4px";
-  settingsButtonDiv.innerHTML = "<button type='button' id='settingsButton'>Settings</button>";
-  settingsButtonDiv.innerHTML += "<button type='button' id='removeStylesButton'>Remove Styles</button>";
+  settingsButtonDiv.innerHTML = "<button type='button' class='textButtons' id='settingsButton'>Settings</button>";
+  settingsButtonDiv.innerHTML += "<button type='button' style='display:none;' class='textButtons' id='removeStylesButton'>Remove Styles</button>";
   toolBar.appendChild(settingsButtonDiv);
   addRemoveStylesButtonFunctionality();
   var settingsButton = document.getElementById('settingsButton');
@@ -358,8 +353,8 @@ function addHeightWidthOptions(){
   containerSizeOptionsDiv.style.lineHeight = "35px";
   containerSizeOptionsDiv.style.textAling = "center";
   containerSizeOptionsDiv.style.borderRight = "2px solid grey";
-  containerSizeOptionsDiv.innerHTML = "<label>Height </label><button type='button' class='simpSizeButtons' id='heightInc'>+</button><button type='button' class='simpSizeButtons' id='heightDec'>-</button>";
-  containerSizeOptionsDiv.innerHTML += "<label>Width </label><button type='button' class='simpSizeButtons' id='widthInc'>+</button><button type='button' class='simpSizeButtons' id='widthDec'>-</button>";
+  containerSizeOptionsDiv.innerHTML = "<label>Height </label><button type='button' class='simpSizeButtons' id='heightInc'>+</button><button type='button' id='heightDec' class='simpSizeButtons'>-</button>";
+  containerSizeOptionsDiv.innerHTML += "<label>Width </label><button type='button' class='simpSizeButtons' id='widthInc'>+</button><button type='button'  id='widthDec' class='simpSizeButtons'>-</button>";
   settingsSection.appendChild(containerSizeOptionsDiv);
 
   addHeightFunctionality();
@@ -461,7 +456,7 @@ function addSaveButton(){
   saveButtonDiv.className = "settingsSectionDiv";
   // saveButtonDiv.style.display = "block";
   // saveButtonDiv.style.margin = "4px";
-  saveButtonDiv.innerHTML = "<button type='button' id='saveButton'>Save</button>";
+  saveButtonDiv.innerHTML = "<button type='button' id='saveButton' class='textButtons'>Save</button>";
   settingsSection.appendChild(saveButtonDiv);
   addSaveButtonFunctionality();
 }
