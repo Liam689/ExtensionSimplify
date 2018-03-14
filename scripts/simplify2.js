@@ -20,12 +20,22 @@ function addWrapper(){
   window.wrapper = document.createElement("div");
   wrapper.id = "wrapper";
   wrapper.style.zIndex = "1000";
-  var marginTop = 0;
+  var getting = browser.storage.local.get(["width", "height"]);
+  getting.then(function(result){
+    console.log("Preferences recieved from storage");
+    wrapper.style.marginTop = ((window.innerHeight - result.height)/2) + "px";
+    wrapper.style.marginLeft = ((window.innerWidth - result.width)/2) + "px";
+  }, function(){
+    console.log("Preferences not recieved");
+    viewBox.style.height = "255px";
+    viewBox.style.width = "1000px";
+  });
   var marginSides = 0;
   var marginPixels = window.innerWidth * (15/100);
+  var getting =
   wrapper.style.paddingRight = "4px";
-  wrapper.style.marginLeft = marginPixels + "px";
-  wrapper.style.marginTop = marginPixels + "px";
+  wrapper.style.marginLeft = "100px";
+  wrapper.style.marginTop = "100px";
   wrapper.style.position = "fixed";
   wrapper.style.display = "inline-block";
   wrapper.style.overflow = "hidden";
@@ -41,14 +51,14 @@ function addWrapper(){
 function addViewBox(){
   window.viewBox = document.createElement("viewBox");
   viewBox.id = "viewBox";
-  var getting = browser.storage.local.get(["colour", "width", "height"]);
+  var getting = browser.storage.local.get(["colour", "width", "height", "marginTop", "marginLeft"]);
   getting.then(function(result){
-    console.log("Colour Recieved");
+    console.log("Preferences recieved from storage");
     viewBox.style.backgroundColor = result.colour;
     viewBox.style.height = result.height + "px";
     viewBox.style.width = result.width + "px";
   }, function(){
-    console.log("Colour not found");
+    console.log("Preferences not recieved");
     viewBox.style.backgroundColor = "white";
     viewBox.style.height = "255px";
     viewBox.style.width = "1000px";
@@ -59,8 +69,14 @@ function addViewBox(){
   viewBox.style.top = "0";
   viewBox.style.float = "left";
   viewBox.style.overflow = "hidden";
-  wrapper.appendChild(viewBox);
+  console.log(viewBox.style.height);
   console.log("ViewBox added");
+  wrapper.appendChild(viewBox);
+}
+
+function fixWrapperMargin(){
+  console.log("Height : " + parseFloat(viewBox.style.height));
+  // wrapper.style.marginTop = ((window.innerHeight - parseFloat(viewBox.style.height)) / 2) + "px";
 }
 
 function addTextBox(){
@@ -87,7 +103,7 @@ function addTextBox(){
 function addToolBar(){
   window.toolBar = document.createElement("div");
   toolBar.id = "toolBar";
-  console.log(toolBar.id);
+  console.log("Toolbar Added");
   var getting = browser.storage.local.get("width");
   getting.then(function(result){
     toolBar.style.width = result.width + "px";
@@ -102,7 +118,6 @@ function addToolBar(){
   toolBar.style.display = "inline-block";
   toolBar.style.float = "left";
   wrapper.appendChild(toolBar);
-  //Add inside of toolbar
   addSearchBar();
   addSettingsButton();
   addSettingsSection();
@@ -131,7 +146,6 @@ function collectAllAppropriateElementsVTwo(){
   //   lookForAppropriateTags(divCopyArray[i]);
   // }
   lookForAppropriateTags(bodyTag);
-  console.log(appropriateElements.length);
   appropriateElements.forEach(function(element){
     textBox.appendChild(element);
   });
@@ -148,7 +162,6 @@ function lookForAppropriateTags(element){
   window.wantedElements = ['P', 'UL', 'LI', 'OL', 'H', 'H1', 'H2', 'H3', 'H4'];
   window.unwantedRoles = ['navigation', 'complementary', 'banner','menu '];
   if (element.tagName == 'DIV') {
-    console.log(/share/g.test(element.className) +  " : " + element.className);
     if (!(unwantedRoles.includes(element.getAttribute('role'))) && !(/share/g.test(element.className))) {
       [].forEach.call(element.childNodes, function(item){
         lookForAppropriateTags(item);
@@ -199,6 +212,7 @@ function addSearchBar(){
   toolBar.appendChild(searchBar);
   window.searchButtonVar = document.getElementById("searchButton");
   searchButtonVar.style.marginRight = "5px";
+  console.log("Search Bar added");
   addSearchButtonFunctionality(searchButtonVar);
   addNextPrevButtonFunctionality();
   addClearSearchButton();
@@ -263,14 +277,20 @@ function addNextPrevButtonFunctionality(){
   var searchCounter = 1;
   nextButton.onclick = function (){
     console.log("next search");
-    searchList[searchCounter].scrollIntoView();
-    searchCounter ++;
+    if (searchCounter < searchList.length) {
+      searchList[searchCounter].scrollIntoView();
+      searchCounter ++;
+    }
+
   }
 
   prevButton.onclick = function(){
     console.log("previous search");
-    searchCounter --;
-    searchList[searchCounter - 1].scrollIntoView();
+    if(searchCounter >= 0){
+      searchCounter --;
+      searchList[searchCounter].scrollIntoView();
+    }
+
 
   }
 }
@@ -443,7 +463,7 @@ function addSaveButton(){
   // saveButtonDiv.style.margin = "4px";
   saveButtonDiv.innerHTML = "<button type='button' id='saveButton'>Save</button>";
   settingsSection.appendChild(saveButtonDiv);
-   addSaveButtonFunctionality();
+  addSaveButtonFunctionality();
 }
 function addSaveButtonFunctionality(){
   var saveButton = document.getElementById("saveButton");
@@ -455,6 +475,8 @@ function addSaveButtonFunctionality(){
     searchBar.style.display = "block";
     settingsButtonDiv.style.display = "block";
     var storingSettings = browser.storage.local.set({
+      marginTop : parseFloat(viewBox.style.marginTop),
+      marginLeft : parseFloat(viewBox.style.marginLeft),
       colour: viewBox.style.backgroundColor,
       width: parseFloat(viewBox.style.width),
       height: parseFloat(viewBox.style.height),
